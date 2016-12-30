@@ -8,7 +8,7 @@
 /* jshint ignore: end   */
 
 function getFlow(id) {   // jshint ignore:line
-    window.location.href = '/getFlow/' + id;
+    window.location.href = '/flow_page/?id=' + id;
 }
 
 

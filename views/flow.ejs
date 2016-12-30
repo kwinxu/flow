@@ -1,36 +1,55 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ch">
 
 <head>
     <meta charset="UTF-8">
-    <title>
-        <%= flow.name %>
-    </title>
+    <title></title>
+    <script src="/javascripts/jquery-min.js" type="text/javascript"></script>
     <script src="/javascripts/go.js" type="text/javascript"></script>
     <script src="/javascripts/flowInit.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        window.onload = function () {
+            init();
+            setTimeout(function(){
+                $.ajax({
+                    url: '/flow/' + document.getElementById('flowId').value,
+                    type: 'GET',
+                    dataType: 'JSON',
+                    success: function (result) {
+                        let flow = JSON.parse(result).result;
+                        document.title = flow.name;
+                        document.getElementById('name').value = flow.name;
+                        document.getElementById('desc').value = flow.desc;
+                        load(flow.content);
+                    }
+                })
+            },300)
+
+            $('#name,#desc').change(function(){
+                console.log(myDiagram.isModified)
+                myDiagram.isModified = true;
+            })
+        }
+
+    </script>
 </head>
 
-<body onload="init();">
-<input type="hidden" id="flowId" value="<%= flow.id %>" />
-<div id="sample">
-    <div id="myDiagramDiv" style="border: solid 1px black; width: 100%; height: 400px"></div>
-<div>
-    <div>
-        <button id="SaveButton" onclick="save()">Save</button>
-<button onclick="load()">Load</button>
-Diagram Model saved in JSON format:
-</div>
-<textarea id="mySavedModel" style="width:100%;height:300px">{ "nodeKeyProperty": "id", "nodeDataArray": [ { "id": 0, "loc": "120 120", "text": "Initial" }, { "id": 1, "loc": "330
-120", "text": "First down" }, { "id": 2, "loc": "226 376", "text": "First up" }, { "id": 3, "loc": "60 276", "text": "Second
-down" }, { "id": 4, "loc": "226 226", "text": "Wait" } ], "linkDataArray": [ { "from": 0, "to": 0, "text": "up or timer",
-"curviness": -20 }, { "from": 0, "to": 1, "text": "down", "curviness": 20 }, { "from": 1, "to": 0, "text": "up (moved)\nPOST",
-"curviness": 20 }, { "from": 1, "to": 1, "text": "down", "curviness": -20 }, { "from": 1, "to": 2, "text": "up (no move)"
-}, { "from": 1, "to": 4, "text": "timer" }, { "from": 2, "to": 0, "text": "timer\nPOST" }, { "from": 2, "to": 3, "text":
-"down" }, { "from": 3, "to": 0, "text": "up\nPOST\n(dblclick\nif no move)" }, { "from": 3, "to": 3, "text": "down or timer",
-"curviness": 20 }, { "from": 4, "to": 0, "text": "up\nPOST" }, { "from": 4, "to": 4, "text": "down" } ] }
-</textarea>
-</div>
-</div>
+<body>
+    <input type="hidden" id="flowId" value="<%=id %>" />
+    <div id="sample">
+        <div id="myDiagramDiv" style="border: solid 1px black; width: 100%; height: 700px"></div>
+        <div>
+            <div>
+                <button id="SaveButton" onclick="save()">保存</button>
+                <button id="return" onclick="_return()">返回</button>
+                <br/>
+                <label>名称：<input id="name" type="text" /></label>
+                <h4>添加介绍:</h4>
+                <textarea id="desc" style="width:100%;height:100px">
+                </textarea>
+            </div>
+        </div>
+    </div>
 </body>
 
 </html>

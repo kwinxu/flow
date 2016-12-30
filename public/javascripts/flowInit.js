@@ -4,7 +4,6 @@
  *@description 
  */
 /* jshint ignore: start */
-'use strict';
 
 function init() {
     if (window.goSamples) goSamples();  // init for these samples -- you don't need to call this
@@ -18,7 +17,7 @@ function init() {
                 // have mouse wheel events zoom in and out instead of scroll up and down
                 "toolManager.mouseWheelBehavior": go.ToolManager.WheelZoom,
                 // support double-click in background creating a new node
-                "clickCreatingTool.archetypeNodeData": { text: "new node" },
+                "clickCreatingTool.archetypeNodeData": { text: "tableName" },
                 // enable undo & redo
                 "undoManager.isEnabled": true
             });
@@ -86,7 +85,7 @@ function init() {
         var fromNode = adornment.adornedPart;
         var fromData = fromNode.data;
         // create a new "State" data object, positioned off to the right of the adorned Node
-        var toData = { text: "new" };
+        var toData = { text: "tableName" };
         var p = fromNode.location.copy();
         p.x += 200;
         toData.loc = go.Point.stringify(p);  // the "loc" property is a string, not a Point object
@@ -98,7 +97,7 @@ function init() {
         var linkdata = {
             from: model.getKeyForNodeData(fromData),  // or just: fromData.id
             to: model.getKeyForNodeData(toData),
-            text: "transition"
+            text: ""
         };
         // and add the link data to the model
         model.addLinkData(linkdata);
@@ -134,7 +133,7 @@ function init() {
                             { 0: "rgb(240, 240, 240)", 0.3: "rgb(240, 240, 240)", 1: "rgba(240, 240, 240, 0)" }),
                         stroke: null
                     }),
-                $(go.TextBlock, "transition",  // the label text
+                $(go.TextBlock, "",  // the label text
                     {
                         textAlign: "center",
                         font: "9pt helvetica, arial, sans-serif",
@@ -147,14 +146,34 @@ function init() {
         );
 
     // read in the JSON data from the "mySavedModel" element
-    load();
 }
 
 // Show the diagram's model in JSON format
 function save() {
-    document.getElementById("mySavedModel").value = myDiagram.model.toJson();
+    $.ajax({
+        url: '/flow/' + document.getElementById('flowId').value,
+        type: 'PUT',
+        dataType: 'JSON',
+        data: {
+            id: document.getElementById('flowId').value,
+            name: document.getElementById('name').value,
+            desc: document.getElementById('desc').value,
+            content: myDiagram.model.toJson()
+        },
+        success: function (result) {
+            myDiagram.isModified = false;
+            alert('保存成功！');
+        }
+    })
 }
-function load() {
-    myDiagram.model = go.Model.fromJson(document.getElementById("mySavedModel").value);
+
+
+function load(flowJSON) {
+    myDiagram.model = go.Model.fromJson(flowJSON);
+}
+
+
+function _return() {
+    window.location.href = '/'
 }
 /* jshint ignore: end   */
