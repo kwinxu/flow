@@ -1,0 +1,21 @@
+{
+  "globals": {
+    "it": false,
+    "console": false,
+    "require": false,
+    "module": false,
+    "exports": false,
+    "__dirname": false,
+    "process": false
+  },
+  "esversion": 6,
+  "asi": true,
+  "curly": true,
+  "eqeqeq": true,
+  "quotmark": true,
+  "bitwise": true,
+  "indent": 4,
+  "latedef": true,
+  "laxcomma": true,
+  "unused": true
+}
