@@ -28,3 +28,14 @@ function _delete(id) {    // jshint ignore:line
         }
     });
 }
+
+window.onload = function () {
+    $('#add').click(function () {
+        var name = prompt('请输入名称：');
+        if (name) {
+            window.location.href = '/flow_page?name=' + name;
+        } else {
+            alert('请输入名称！');
+        }
+    });
+}

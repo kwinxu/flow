@@ -21,12 +21,17 @@ router.get('/', (req, res) => {
     res.render('index', { flowList: dataArr });
 });
 
-router.get('/flow/:id', (req, res) => {
-    let id = req.params.id;
-    let flow = _.find(require('../data_source/data.json').flowList, (flow) => {
-        return flow.id === id;
-    })
-    res.render('flow', { flow: flow });
+router.get('/flow', (req, res) => {
+    let id = req.query.id;
+    let flow = null;
+    if (id) {
+        flow = _.find(require('../data_source/data.json').flowList, (flow) => {
+            return flow.id === id;
+        })
+        return res.render('flow', { flow: flow });
+    }
+    let name = req.query.name;
+    
 });
 
 router.delete('/flow/:id', (req, res) => {
@@ -37,8 +42,6 @@ router.delete('/flow/:id', (req, res) => {
     });
     dataSource.flowList.splice(index, 1);
     fs.writeFile('./data_source/data.json', JSON.stringify(dataSource), (error) => {
-        console.log(error)
-        console.log(__dirname)
         delete require.cache[require.resolve('../data_source/data.json')];
         if (error) {
             return res.json({ error_code: -1, message: 'deleted failed.' });
