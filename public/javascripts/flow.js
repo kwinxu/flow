@@ -33,9 +33,21 @@ window.onload = function () {
     $('#add').click(function () {
         var name = prompt('请输入名称：');
         if (name) {
-            window.location.href = '/flow_page?name=' + name;
+            createFlow(name);
         } else {
             alert('请输入名称！');
+        }
+    });
+}
+
+
+function createFlow(name) {     // jshint ignore:line
+    $.ajax({
+        url: '/flow',
+        type: 'POST',
+        dataType: 'JSON',
+        success: function (result) {    // jshint ignore:line
+            window.location.href = '/';
         }
     });
 }
